@@ -1,0 +1,32 @@
+.task {
+    /* border: 1px solid black; */
+    border-radius: 10px;
+    text-align: center;
+
+    margin: 10px;
+    width: 400px;
+
+    background-color: cadetblue;
+}
+
+.task h1,h2,h3,h4,h5,h6 {
+    text-align: center;
+}
+
+.task-title {
+    display: flex;
+}
+
+
+.task-title-children {
+    margin-left: auto;
+}
+
+/* .task-tags {
+    
+} */
+
+/* .task-title-children {
+    margin-left: auto;
+} */
+
