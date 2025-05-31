@@ -6,7 +6,7 @@ import type {ChangeEvent} from "react";
 type TaskTag = string;
 
 export interface ITaskProps {
-    id: number,
+    id: string,
     title: string,
     description: string,
     creator: string,
@@ -17,37 +17,46 @@ export interface ITaskProps {
     tags: TaskTag[]
 }
 
+type CreateTaskInput = Partial<Omit<ITaskProps, 'id' | 'creation_date'>>;
+export function createTask(
+    {
+        title = "",
+        description = "",
+        creator = "Anonymous",
+        responsibles = [],
+        timedelta_seconds = Infinity,
+        priority = 5,
+        tags = []
+    }: CreateTaskInput = {}
+): ITaskProps {
+    return {
+        id: crypto.randomUUID(),
+        creation_date: new Date(),
+
+        title,
+        description,
+        creator,
+        responsibles,
+        timedelta_seconds,
+        priority,
+        tags
+    };
+}
+
 export const defaultTasks: ITaskProps[] = [
-    {
-        id: 1,
-        title: "Buy milk",
-        description: "Go to the shop and buy 1L of ultra-pasteurized milk.",
-        creator: "Sergey",
-        creation_date: new Date(),
-        timedelta_seconds: +Infinity,
-        priority: 5,
-        tags: ["Routine", "Shopping"]
-    },
-    {
-        id: 2,
-        title: "Go to the cinema",
+    createTask({
+        title: "Buy milk", 
+        description: "Go to the shop and buy 1L of ultra-pasteurized milk."
+    }),
+    createTask({
+        title: "Go to the cinema", 
         description: "Go to the cinema.",
-        creator: "Sergey",
-        creation_date: new Date(),
-        timedelta_seconds: +Infinity,
-        priority: 2,
-        tags: ["Routine", "Entertainments"]
-    },
-    {
-        id: 3,
-        title: "Water the flowers",
-        description: "",
-        creator: "Sergey",
-        creation_date: new Date(),
-        timedelta_seconds: 86400,
-        priority: 6,
-        tags: ["Routine"]
-    },
+        priority: 2
+    }),
+    createTask({
+        title: "Water the flowers", 
+        timedelta_seconds: 86400
+    }),
 
 ]
 
