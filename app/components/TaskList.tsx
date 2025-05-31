@@ -1,6 +1,5 @@
-import { SortableItem } from "~/components/SortableItem";
-import { ClientOnly } from "~/components/ClientOnly";
-import Task, { defaultTasks } from "./task";
+import { SortableItem } from "./SortableItem"
+import Task from "./task";
 import type { ITaskProps } from "./task";
 
 import {

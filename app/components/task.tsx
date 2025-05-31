@@ -155,11 +155,11 @@ function TaskRepetion({timedelta_s}: {timedelta_s: number}) {
 
 export default function Task(props : ITaskProps) {
 
-    let responsibles: React.ReactNode[];
+    // let responsibles: React.ReactNode[];
     
-    if (props.responsibles) {
-        responsibles = props.responsibles.map(el => <div className="Responsible">{el}</div>)
-    }
+    // if (props.responsibles) {
+    //     responsibles = props.responsibles.map(el => <div className="Responsible">{el}</div>)
+    // }
 
     return <div className="task">
         
