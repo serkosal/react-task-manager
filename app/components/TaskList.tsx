@@ -33,8 +33,7 @@ export default function TaskList(
         })
     );
 
-    return <ClientOnly>
-        <DndContext 
+    return <DndContext 
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
@@ -54,8 +53,7 @@ export default function TaskList(
                     }
                 )}
             </SortableContext>
-        </DndContext>
-    </ClientOnly>
+    </DndContext>
 
     function handleDragEnd(event: any) {
         const {active, over} = event;
