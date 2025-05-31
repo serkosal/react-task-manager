@@ -1,23 +1,10 @@
-import {useSortable} from '@dnd-kit/sortable';
-import {CSS} from '@dnd-kit/utilities';
+import {useSortable} from '@dnd-kit/react/sortable';
 
-export function SortableItem(props : any) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({id: props.id});
-  
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-  
-  return (
-    <div className="Dragable" ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      {props.children}
-    </div>
-  );
+
+export function SortableItem({id, index, children}: any) {
+    const {ref} = useSortable({id, index});
+
+    return (
+        <div ref={ref} className="Dragable">{children}</div>
+    );
 }
