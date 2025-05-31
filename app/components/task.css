@@ -17,6 +17,20 @@
     display: flex;
 }
 
+.task-title-text-input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.task-description-text-input {
+    width: 100%;
+    resize: none;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
 
 .task-title-children {
     margin-left: auto;

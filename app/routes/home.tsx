@@ -57,7 +57,7 @@ export default function Home() {
                             key={task.id} 
                             id={task.id}
                             >
-                                <Task {...task} />
+                                <Task key={task.id} {...task} />
                             </SortableItem>
                     );
                     }

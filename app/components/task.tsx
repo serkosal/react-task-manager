@@ -1,4 +1,7 @@
+import { useState } from "react";
 import "./task.css"
+
+import type {ChangeEvent} from "react";
 
 type TaskTag = string;
 
@@ -58,13 +61,25 @@ const DATETIME_FORMAT: Intl.DateTimeFormatOptions = {
     hour12: false,
 };
 
-function TaskTitle({title, children}: {title: string, children: React.ReactNode}) {
+function TaskTitle({title_init, children}: {title_init: string, children?: React.ReactNode}) {
+
+    const [title, setTitle] = useState(title_init);
+
+    function titleOnChange(event: ChangeEvent<HTMLInputElement>) {
+        setTitle(event.target.value);
+    };
+
     return <div className="task-title">
         <div>
             <input type="checkbox" id="task-done-checkbox" name="task-done-checkbox" />
-            <strong className="">
-                {title}
-            </strong>
+            <input 
+                type="text" 
+                className="task-title-text-input"
+                placeholder="task title..."
+                value={title} 
+                onChange={titleOnChange} 
+                onKeyDown={(e) => e.stopPropagation()}
+            />
         </div>
         
         <div className="task-title-children">
@@ -73,11 +88,24 @@ function TaskTitle({title, children}: {title: string, children: React.ReactNode}
     </div>
 }
 
-function TaskDescription({description} : {description: string}) {
+function TaskDescription({description_init} : {description_init: string}) {
+
+    const [descr, setDescr] = useState(description_init);
+
+    function descrOnChange(event: ChangeEvent<HTMLTextAreaElement>) {
+        setDescr(event.target.value);
+    };
+
     return <div className="task-description">
         
         <hr/>
-        {description}
+        <textarea 
+            className="task-description-text-input"
+            value={descr}
+            placeholder="task description..."
+            onChange={descrOnChange} 
+            onKeyDown={(e) => e.stopPropagation()}
+        />
         <hr/>
         
     </div>
@@ -126,13 +154,13 @@ export default function Task(props : ITaskProps) {
 
     return <div className="task">
         
-        <TaskTitle title={props.title}>
+        <TaskTitle title_init={props.title}>
             <TaskCreator creator={props.creator} />
             <TaskCreationDate creation_date={props.creation_date} />
         </TaskTitle>
         
 
-        <TaskDescription description={props.description}/>
+        <TaskDescription description_init={props.description}/>
 
         <TaskRepetion timedelta_s={props.timedelta_seconds} />
 
@@ -140,7 +168,7 @@ export default function Task(props : ITaskProps) {
 
         <div className="task-tags" >
 
-            {props.tags.map(el => <a href="">#{el} </a>)}
+            {props.tags.map((el, ind) => <a key={ind} href="">#{el} </a>)}
 
         </div>
     </div>;
