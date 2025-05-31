@@ -7,6 +7,7 @@ type TaskTag = string;
 
 export interface ITaskProps {
     id: string,
+    color: string,
     title: string,
     description: string,
     creator: string,
@@ -17,7 +18,12 @@ export interface ITaskProps {
     tags: TaskTag[]
 }
 
-type CreateTaskInput = Partial<Omit<ITaskProps, 'id' | 'creation_date'>>;
+const TASK_COLORS = [
+    '#356ca6', '#35a673', '#7ca635', "#6635a6",
+    '#823b71', '#3f4d4b', '#b57131', '#a84343'
+]
+
+type CreateTaskInput = Partial<Omit<ITaskProps, 'id' | 'creation_date' | 'color'>>;
 export function createTask(
     {
         title = "",
@@ -32,6 +38,7 @@ export function createTask(
     return {
         id: crypto.randomUUID(),
         creation_date: new Date(),
+        color: TASK_COLORS[Math.floor(Math.random() * TASK_COLORS.length)],
 
         title,
         description,
@@ -103,6 +110,12 @@ function TaskDescription({description_init} : {description_init: string}) {
 
     function descrOnChange(event: ChangeEvent<HTMLTextAreaElement>) {
         setDescr(event.target.value);
+
+        if (event.target.scrollHeight < 150)
+        {
+            event.target.style.height = "auto";
+            event.target.style.height = `${event.target.scrollHeight}px`;
+        }  
     };
 
     return <div className="task-description">
@@ -112,7 +125,7 @@ function TaskDescription({description_init} : {description_init: string}) {
             className="task-description-text-input"
             value={descr}
             placeholder="task description..."
-            onChange={descrOnChange} 
+            onInput={descrOnChange} 
             onKeyDown={(e) => e.stopPropagation()}
         />
         <hr/>
@@ -161,7 +174,11 @@ export default function Task(props : ITaskProps) {
     //     responsibles = props.responsibles.map(el => <div className="Responsible">{el}</div>)
     // }
 
-    return <div className="task">
+    const style = {
+        backgroundColor: props.color
+    }
+
+    return <div className="task" style={style}>
         
         <TaskTitle title_init={props.title}>
             <TaskCreator creator={props.creator} />

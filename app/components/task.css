@@ -1,12 +1,10 @@
 .task {
-    border: 1px solid rgb(41, 72, 73);
+    border: 1px solid black;
     border-radius: 10px;
     text-align: center;
 
     margin: 10px;
     width: 400px;
-
-    background-color: cadetblue;
 }
 
 .task h1,h2,h3,h4,h5,h6 {
@@ -25,6 +23,7 @@
 
 .task-description-text-input {
     width: 100%;
+    height: fit-content;
     resize: none;
     background-color: transparent;
     border: none;
