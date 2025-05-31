@@ -9,6 +9,7 @@ export interface ITaskProps {
     id: string,
     color: string,
     title: string,
+    is_done: boolean,
     description: string,
     creator: string,
     responsibles?: number[],
@@ -29,6 +30,7 @@ export function createTask(
         title = "",
         description = "",
         creator = "Anonymous",
+        is_done = false,
         responsibles = [],
         timedelta_seconds = Infinity,
         priority = 5,
@@ -43,6 +45,7 @@ export function createTask(
         title,
         description,
         creator,
+        is_done,
         responsibles,
         timedelta_seconds,
         priority,
@@ -77,24 +80,60 @@ const DATETIME_FORMAT: Intl.DateTimeFormatOptions = {
     hour12: false,
 };
 
-function TaskTitle({title_init, children}: {title_init: string, children?: React.ReactNode}) {
+function findTask(id: string, tasks: ITaskProps[]): number {
+    return tasks.findIndex(item => item.id === id);
+}
 
-    const [title, setTitle] = useState(title_init);
+function TaskTitle({id, tasks, children, setTasks}: {
+    id: string,
+    tasks: ITaskProps[],
+    children?: React.ReactNode, 
+    setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
+}) {
 
-    function titleOnChange(event: ChangeEvent<HTMLInputElement>) {
-        setTitle(event.target.value);
+    const this_task = tasks[findTask(id, tasks)];
+
+    function titleOnChange(ev: ChangeEvent<HTMLInputElement>) {
+        console.log(ev.target.value);
+        setTasks(prev => {
+            const index = findTask(id, prev);
+            console.log('Updating task at index:', index);
+            const updatedTask = {...prev[index], title: ev.target.value}
+            const updatedTasks = [...prev];
+            updatedTasks[index] = updatedTask;
+
+            return [...updatedTasks];
+        })
+
+        
     };
+
+    function checkBoxOnChange(ev: ChangeEvent<HTMLInputElement>) {
+        console.log(ev.target.checked);
+        const index = findTask(id, tasks);
+        const updatedTask = {...this_task, is_done: ev.target.checked}
+        const new_tasks = [...tasks];
+        new_tasks[index] = updatedTask;
+        setTasks(new_tasks);
+    }
 
     return <div className="task-title">
         <div>
-            <input type="checkbox" id="task-done-checkbox" name="task-done-checkbox" />
+            <input 
+                type="checkbox" 
+                id={`task-done-checkbox-${id}`}
+                name={`task-done-checkbox-${id}`}
+                value={`task-done-checkbox-${id}`}
+                checked={this_task.is_done}
+                onChange={checkBoxOnChange}
+            />
             <input 
                 type="text" 
                 className="task-title-text-input"
                 placeholder="task title..."
-                value={title} 
+                value={this_task.title} 
                 onChange={titleOnChange} 
-                onKeyDown={(e) => e.stopPropagation()}
+                onKeyDown={(e) => e.stopPropagation()} // не работает пробел без него
             />
         </div>
         
@@ -166,7 +205,13 @@ function TaskRepetion({timedelta_s}: {timedelta_s: number}) {
     </div>
 }
 
-export default function Task(props : ITaskProps) {
+export default function Task(props : {
+    id: string, 
+    tasks: ITaskProps[], 
+    setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
+}) {
+
+    const this_task = props.tasks[findTask(props.id, props.tasks)];
 
     // let responsibles: React.ReactNode[];
     
@@ -175,26 +220,26 @@ export default function Task(props : ITaskProps) {
     // }
 
     const style = {
-        backgroundColor: props.color
+        backgroundColor: this_task.color
     }
 
     return <div className="task" style={style}>
         
-        <TaskTitle title_init={props.title}>
-            <TaskCreator creator={props.creator} />
-            <TaskCreationDate creation_date={props.creation_date} />
+        <TaskTitle {...props}>
+            <TaskCreator creator={this_task.creator} />
+            <TaskCreationDate creation_date={this_task.creation_date} />
         </TaskTitle>
         
 
-        <TaskDescription description_init={props.description}/>
+        <TaskDescription description_init={this_task.description}/>
 
-        <TaskRepetion timedelta_s={props.timedelta_seconds} />
+        <TaskRepetion timedelta_s={this_task.timedelta_seconds} />
 
-        <TaskPriority priority={props.priority} />
+        <TaskPriority priority={this_task.priority} />
 
         <div className="task-tags" >
 
-            {props.tags.map((el, ind) => <a key={ind} href="">#{el} </a>)}
+            {this_task.tags.map((el, ind) => <a key={ind} href="">#{el} </a>)}
 
         </div>
     </div>;
