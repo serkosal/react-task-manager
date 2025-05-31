@@ -16,7 +16,7 @@ export function SortableItem(props : any) {
   };
   
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div className="Dragable" ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {props.children}
     </div>
   );

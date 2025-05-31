@@ -1,3 +1,8 @@
 .tasks {
     display: flex;
 }
+
+.Dragable {
+    /* to prevent scrolling */
+    touch-action: none; 
+}

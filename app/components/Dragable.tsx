@@ -11,7 +11,7 @@ export function Draggable(props : {id:number, children?: React.ReactElement | st
 
   
   return (
-    <button ref={setNodeRef} style={style} {...listeners} {...attributes}>
+    <button className="Dragable" ref={setNodeRef} style={style} {...listeners} {...attributes}>
       {props.children}
     </button>
   );
