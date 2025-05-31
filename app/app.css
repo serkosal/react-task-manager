@@ -1,5 +1,36 @@
-.tasks {
+html, body {
+    margin: 0px;
+    padding: 0px;
+
+    height: 100vh;
+}
+
+#root {
+    height: 100%;
+}
+
+.App {
     display: flex;
+
+    min-height: 100%;
+}
+
+.Menu {
+    background-color: cornflowerblue;
+
+    display:flex;
+    flex-direction: column;
+}
+
+.main-container {
+    width: 100%;
+    min-height: 100%;
+    background-color: darkslategray;
+}
+
+.task-list {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .Dragable {

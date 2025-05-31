@@ -14,7 +14,7 @@ import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
+  rectSortingStrategy,
 } from '@dnd-kit/sortable';
 
 
@@ -39,7 +39,7 @@ export default function TaskList(
         >
             <SortableContext 
                 items={tasks}
-                strategy={verticalListSortingStrategy}
+                strategy={rectSortingStrategy}
             >
                 {tasks.map(task => {
                     return (<SortableItem 
