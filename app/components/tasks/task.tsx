@@ -14,6 +14,7 @@ export interface ITaskProps {
     creator: string,
     responsibles?: number[],
     creation_date: Date,
+    deadline: Date,
     timedelta_seconds: number
     priority: number,
     tags: TaskTag[]
@@ -24,32 +25,38 @@ const TASK_COLORS = [
     '#823b71', '#3f4d4b', '#b57131', '#a84343'
 ]
 
-type CreateTaskInput = Partial<Omit<ITaskProps, 'id' | 'creation_date' | 'color'>>;
+type CreateTaskInput = Partial<Omit<ITaskProps, 'id' | 'creation_date'>>;
 export function createTask(
     {
         title = "",
         description = "",
+        priority = 5,
+        deadline = (new Date(Date.now() + 24*3600*1000)),
+
         creator = "Anonymous",
         is_done = false,
         responsibles = [],
         timedelta_seconds = Infinity,
-        priority = 5,
-        tags = []
+        tags = [],
+        color = TASK_COLORS[Math.floor(Math.random() * TASK_COLORS.length)]
     }: CreateTaskInput = {}
 ): ITaskProps {
     return {
-        id: crypto.randomUUID(),
-        creation_date: new Date(),
-        color: TASK_COLORS[Math.floor(Math.random() * TASK_COLORS.length)],
+        id: crypto.randomUUID(),        
 
         title,
         description,
-        creator,
-        is_done,
-        responsibles,
-        timedelta_seconds,
         priority,
-        tags
+        deadline,
+        is_done,
+
+        creator,
+        creation_date: new Date(),
+        responsibles,
+
+        timedelta_seconds,
+        tags,
+        color,
     };
 }
 
@@ -185,6 +192,14 @@ function TaskCreationDate({creation_date} : {creation_date: Date}) {
     </div>
 }
 
+function TaskDeadlineDate({deadline} : {deadline: Date}) {
+    return  <div className="task-deadline-date">
+        {deadline.toLocaleString(
+            'en-GB', DATETIME_FORMAT
+        )}
+    </div>
+}
+
 function TaskPriority({priority}: {priority: number}) {
     return <div className="task-priority">
         priority {priority}
@@ -227,6 +242,7 @@ export default function Task(props : {
         <TaskTitle {...props}>
             <TaskCreator creator={this_task.creator} />
             <TaskCreationDate creation_date={this_task.creation_date} />
+            <TaskDeadlineDate deadline={this_task.deadline} />
         </TaskTitle>
         
 

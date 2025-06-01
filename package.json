@@ -13,6 +13,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dnd-kit/helpers": "^0.1.18",
     "@dnd-kit/react": "^0.1.18",
     "gh-pages": "^6.3.0",
     "react": "^19.1.0",

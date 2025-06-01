@@ -4,11 +4,23 @@ import Filters from "./components/Filters"
 import type { IFilters } from "./components/tasks/task_filtration"
 
 import { useState } from 'react'
-import {defaultTasks} from "./components/tasks/task"
+import {defaultTasks, type ITaskProps} from "./components/tasks/task"
+
+let init_tasks: ITaskProps[];
+
+try {
+  const stored = localStorage.getItem("tasks");
+  init_tasks = stored ? JSON.parse(stored) : defaultTasks;
+} catch (e) {
+  console.error("Failed to parse tasks from localStorage", e);
+  init_tasks = defaultTasks;
+}
 
 export default function MainContainer() {
 
-    const [tasks, setTasks] = useState(defaultTasks);
+    const [tasks, setTasks] = useState(init_tasks);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+
     const [filters, setFilters] = useState<IFilters>({hide_done: false})
 
     return <div className="main-container">
