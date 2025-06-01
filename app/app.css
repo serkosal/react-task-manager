@@ -31,6 +31,7 @@ html, body {
 .task-list {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .Dragable {

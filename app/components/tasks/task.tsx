@@ -109,7 +109,6 @@ function TaskTitle({id, tasks, children, setTasks}: {
     };
 
     function checkBoxOnChange(ev: ChangeEvent<HTMLInputElement>) {
-        console.log(ev.target.checked);
         const index = findTask(id, tasks);
         const updatedTask = {...this_task, is_done: ev.target.checked}
         const new_tasks = [...tasks];

@@ -1,17 +1,18 @@
-import { SortableItem } from "./SortableItem";
+import { SortableItem } from "../dndkit/SortableItem";
 import Task from "./task";
 import type { ITaskProps } from "./task";
+import type { IFilters } from "./task_filtration"
 
 
 export default function TaskList(
-    {tasks, setTasks} : {
+    {tasks, setTasks, filters} : {
         tasks: ITaskProps[], 
-        setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
+        setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>,
+        filters: IFilters
     }) {
 
-    const filtered_tasks = tasks.filter(task => !task.is_done);
-
-    
+    const filtered_tasks = filters.hide_done ? 
+        tasks.filter(task => !task.is_done) : tasks;
 
     return <>{
         filtered_tasks.map(

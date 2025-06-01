@@ -1,5 +1,5 @@
 import './app.css'
-import MainContainer from './components/MainContainer'
+import MainContainer from './MainContainer'
 import Menu from './components/Menu'
 
 function App() {

@@ -1,7 +1,7 @@
-import React from 'react';
+// import React from 'react';
 // import {useDroppable} from '@dnd-kit/core';
 
-export default function Droppable(props : {children?: React.ReactElement | React.ReactElement[] | string}) {
+// export default function Droppable(props : {children?: React.ReactElement | React.ReactElement[] | string}) {
   // const {isOver, setNodeRef} = useDroppable({
   //   id: 'droppable',
   // });
@@ -15,4 +15,4 @@ export default function Droppable(props : {children?: React.ReactElement | React
   //     {props.children}
   //   </div>
   // );
-}
+// }
