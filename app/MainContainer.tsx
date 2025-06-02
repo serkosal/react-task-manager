@@ -34,7 +34,6 @@ try {
 export default function MainContainer() {
 
     const [tasks, setTasks] = useState(init_tasks);
-    localStorage.setItem("tasks", JSON.stringify(tasks));
 
     const [filters, setFilters] = useState<IFilters>({hide_done: false})
 
@@ -43,6 +42,11 @@ export default function MainContainer() {
         <Filters filters={filters} setFilters={setFilters}/>
 
             <AddTask setTasks={setTasks}/>
+            <button onClick={() => {
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+            }}>
+                Save to the local storage
+            </button>
             <div className="task-list">
                 <TaskList tasks={tasks} setTasks={setTasks} filters={filters} />
             </div>

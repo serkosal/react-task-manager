@@ -296,11 +296,8 @@ function TaskDeadlineDate({id, tasks, setTasks}: {
     />
 }
 
-function TaskFooter({children, id, tasks, setTasks}: {
+function TaskFooter({children}: {
     children: React.ReactNode,
-    id: string,
-    tasks: ITaskProps[],
-    setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
     }) {
 
     return <div className="task-footer">{children}</div>
