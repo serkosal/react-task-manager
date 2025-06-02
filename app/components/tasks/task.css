@@ -1,24 +1,55 @@
 .task {
     border: 1px solid black;
-    border-radius: 10px;
+    border-radius: 20px;
+    overflow: hidden;
+
     text-align: center;
+    color: black;
+    backdrop-filter: blur(1px);
+    background-color: rgba(197, 205, 209, 0.288);
 
     margin: 10px;
     width: 400px;
 }
 
+
 .task h1,h2,h3,h4,h5,h6 {
     text-align: center;
 }
 
-.task-title {
+.task-header {
+    /* border-radius: 10px; */
+    min-height: 50px;
+}
+
+.task-header-main {
     display: flex;
+    width: 100%;
+}
+
+
+.task-header-children {
+    color: rgb(0,0,0, 0.6);
 }
 
 .task-title-text-input {
     background-color: transparent;
+    text-align: center;
+    font-size: large;
     border: none;
     outline: none;
+}
+
+.task-deadline-date {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.task-color-picker {
+    width: 20px;
+    height: 20px;
+    border: 1px;
 }
 
 .task-description-text-input {
@@ -34,3 +65,7 @@
 .task-title-children {
     margin-left: auto;
 }
+
+/* .task-footer {
+    background-color: rgb(222, 235, 235);
+} */

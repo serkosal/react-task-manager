@@ -31,8 +31,6 @@ try {
     init_tasks = defaultTasks;
 }
 
-console.log(init_tasks)
-
 export default function MainContainer() {
 
     const [tasks, setTasks] = useState(init_tasks);
@@ -42,12 +40,12 @@ export default function MainContainer() {
 
     return <div className="main-container">
 
-    <Filters filters={filters} setFilters={setFilters}/>
+        <Filters filters={filters} setFilters={setFilters}/>
 
-        <AddTask setTasks={setTasks}/>
-        <div className="task-list">
-            <TaskList tasks={tasks} setTasks={setTasks} filters={filters} />
-        </div>
+            <AddTask setTasks={setTasks}/>
+            <div className="task-list">
+                <TaskList tasks={tasks} setTasks={setTasks} filters={filters} />
+            </div>
         
     </div>
 }

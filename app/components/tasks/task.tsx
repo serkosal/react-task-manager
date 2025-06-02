@@ -90,7 +90,20 @@ function findTask(id: string, tasks: ITaskProps[]): number {
     return tasks.findIndex(item => item.id === id);
 }
 
-function TaskTitle({id, tasks, children, setTasks}: {
+function hexToRGBA(hex: string, alpha: number): string {
+  // Remove the "#" if present
+  hex = hex.replace(/^#/, '');
+
+  // Parse r, g, b
+  const bigint = parseInt(hex, 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+function TaskHeader({id, tasks, children, setTasks}: {
     id: string,
     tasks: ITaskProps[],
     children?: React.ReactNode, 
@@ -120,8 +133,13 @@ function TaskTitle({id, tasks, children, setTasks}: {
         setTasks(new_tasks);
     }
 
-    return <div className="task-title">
-        <div>
+    const style = {
+        backgroundColor: hexToRGBA(this_task.color, 0.6),
+        backdropFilter: "1px"
+    }
+
+    return <div className="task-header" style={style}>
+        <div className='task-header-main'>
             <input 
                 type="checkbox" 
                 id={`task-done-checkbox-${id}`}
@@ -135,16 +153,25 @@ function TaskTitle({id, tasks, children, setTasks}: {
                 className="task-title-text-input"
                 placeholder="task title..."
                 value={this_task.title} 
-                onChange={titleOnChange} 
-                onKeyDown={(e) => e.stopPropagation()} // не работает пробел без него
+                onChange={titleOnChange}
+                
+                // space don't work because of 
+                // dndkit captures control
+                onKeyDown={(e) => e.stopPropagation()}  
             />
         </div>
         
-        <div className="task-title-children">
+        <div className="task-header-children">
             {children}
         </div>
     </div>
 }
+
+// function TaskBody({id, tasks, setTasks}: {
+//     id: string,
+//     tasks: ITaskProps[],
+//     setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
+//     }) {}
 
 function TaskDescription({id, tasks, setTasks}: {
     id: string,
@@ -156,7 +183,6 @@ function TaskDescription({id, tasks, setTasks}: {
 
     function descrOnChange(event: ChangeEvent<HTMLTextAreaElement>) {
 
-        console.log(this_task.id)
         setTasks( prev => {
 
             const index = findTask(id, prev);
@@ -176,7 +202,7 @@ function TaskDescription({id, tasks, setTasks}: {
 
     return <div className="task-description">
         
-        <hr/>
+
         <textarea 
             className="task-description-text-input"
             value={this_task.description}
@@ -193,6 +219,34 @@ function TaskCreator({creator} : {creator: string}) {
     return <div className="task-creator">
         Created by: <a href="">{creator}</a>
     </div>
+}
+
+function TaskColorPicker({id, tasks, setTasks}: {
+    id: string,
+    tasks: ITaskProps[],
+    setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
+    }) {
+
+        const this_task = tasks[findTask(id, tasks)];
+
+        return <input 
+            type="color"
+            // id={`task-color-picker-${id}`}
+            className="task-color-picker"
+            name='task-color-picker'
+            value={this_task.color}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+
+                setTasks((prev) => {
+                    const index = findTask(id, prev);
+                    const updatedTask = {...prev[index], color: event.target.value}
+                    const updatedTasks = [...prev];
+                    updatedTasks[index] = updatedTask;
+
+                    return updatedTasks;
+                })
+            }}
+        />
 }
 
 function TaskCreationDate({creation_date} : {creation_date: Date}) {
@@ -242,6 +296,16 @@ function TaskDeadlineDate({id, tasks, setTasks}: {
     />
 }
 
+function TaskFooter({children, id, tasks, setTasks}: {
+    children: React.ReactNode,
+    id: string,
+    tasks: ITaskProps[],
+    setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
+    }) {
+
+    return <div className="task-footer">{children}</div>
+}
+
 function TaskPriority({priority}: {priority: number}) {
     return <div className="task-priority">
         priority {priority}
@@ -275,29 +339,25 @@ export default function Task(props : {
     //     responsibles = props.responsibles.map(el => <div className="Responsible">{el}</div>)
     // }
 
-    const style = {
-        backgroundColor: this_task.color
-    }
-
-    return <div className="task" style={style}>
+    return <div className="task">
         
-        <TaskTitle {...props}>
+        <TaskHeader {...props}>
             <TaskCreator creator={this_task.creator} />
             <TaskCreationDate creation_date={this_task.creation_date} />
             <TaskDeadlineDate {...props} />
-        </TaskTitle>
+            <TaskColorPicker {...props} />
+        </TaskHeader>
         
 
         <TaskDescription {...props}/>
 
-        <TaskRepetion timedelta_s={this_task.timedelta_seconds} />
-
-        <TaskPriority priority={this_task.priority} />
-
-        <div className="task-tags" >
-
-            {this_task.tags.map((el, ind) => <a key={ind} href="">#{el} </a>)}
-
-        </div>
+        <TaskFooter {...props}>
+            <TaskRepetion timedelta_s={this_task.timedelta_seconds} />
+            <TaskPriority priority={this_task.priority} />
+            <div className="task-tags" >
+                {this_task.tags.map((el, ind) => <a key={ind} href="">#{el} </a>)}
+            </div>
+        </TaskFooter>
+        
     </div>;
 }

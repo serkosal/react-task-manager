@@ -6,7 +6,7 @@ export default function AddTask({setTasks} : {
     setTasks: Dispatch<SetStateAction<ITaskProps[]>>
 }) {
 
-    return <button onClick={buttonClick}>
+    return <button className="add-task-button" onClick={buttonClick}>
         + Create new task +
     </button>
 
