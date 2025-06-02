@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./task.css"
 
 import type {ChangeEvent} from "react";
@@ -101,10 +100,8 @@ function TaskTitle({id, tasks, children, setTasks}: {
     const this_task = tasks[findTask(id, tasks)];
 
     function titleOnChange(ev: ChangeEvent<HTMLInputElement>) {
-        console.log(ev.target.value);
         setTasks(prev => {
             const index = findTask(id, prev);
-            console.log('Updating task at index:', index);
             const updatedTask = {...prev[index], title: ev.target.value}
             const updatedTasks = [...prev];
             updatedTasks[index] = updatedTask;
@@ -149,12 +146,26 @@ function TaskTitle({id, tasks, children, setTasks}: {
     </div>
 }
 
-function TaskDescription({description_init} : {description_init: string}) {
+function TaskDescription({id, tasks, setTasks}: {
+    id: string,
+    tasks: ITaskProps[],
+    setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
+    }) {
 
-    const [descr, setDescr] = useState(description_init);
+    const this_task = tasks[findTask(id, tasks)];
 
     function descrOnChange(event: ChangeEvent<HTMLTextAreaElement>) {
-        setDescr(event.target.value);
+
+        console.log(this_task.id)
+        setTasks( prev => {
+
+            const index = findTask(id, prev);
+            const updatedTask: ITaskProps = {...prev[index], description: event.target.value}
+            const updatedTasks = [...prev];
+            updatedTasks[index] = updatedTask;
+
+            return [...updatedTasks];
+        });
 
         if (event.target.scrollHeight < 150)
         {
@@ -168,7 +179,7 @@ function TaskDescription({description_init} : {description_init: string}) {
         <hr/>
         <textarea 
             className="task-description-text-input"
-            value={descr}
+            value={this_task.description}
             placeholder="task description..."
             onInput={descrOnChange} 
             onKeyDown={(e) => e.stopPropagation()}
@@ -192,12 +203,43 @@ function TaskCreationDate({creation_date} : {creation_date: Date}) {
     </div>
 }
 
-function TaskDeadlineDate({deadline} : {deadline: Date}) {
-    return  <div className="task-deadline-date">
-        {deadline.toLocaleString(
-            'en-GB', DATETIME_FORMAT
-        )}
-    </div>
+function DateTodateTimeLocalNow(date: Date): string {
+    return  new Date(
+        date.getTime() - date.getTimezoneOffset() * 60_000
+        ).toISOString().slice(0, 16);
+}
+
+function TaskDeadlineDate({id, tasks, setTasks}: {
+    id: string,
+    tasks: ITaskProps[],
+    setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
+    }) {
+
+    const this_task = tasks[findTask(id, tasks)];
+
+    return <input 
+        type="datetime-local" 
+        className="task-deadline-date"
+        value={DateTodateTimeLocalNow(this_task.deadline)}
+        onChange={(event) => {
+            try {
+                const new_deadline = new Date(event.target.value);
+
+                setTasks( prev => {
+                    const index = findTask(id, prev);
+                    const updatedTask: ITaskProps = {...prev[index], deadline: new_deadline }
+                    const updatedTasks = [...prev];
+                    updatedTasks[index] = updatedTask;
+
+                    return updatedTasks;
+                })
+            }
+            catch (e: unknown) {
+                console.log(e);
+            }
+            
+        }}
+    />
 }
 
 function TaskPriority({priority}: {priority: number}) {
@@ -242,11 +284,11 @@ export default function Task(props : {
         <TaskTitle {...props}>
             <TaskCreator creator={this_task.creator} />
             <TaskCreationDate creation_date={this_task.creation_date} />
-            <TaskDeadlineDate deadline={this_task.deadline} />
+            <TaskDeadlineDate {...props} />
         </TaskTitle>
         
 
-        <TaskDescription description_init={this_task.description}/>
+        <TaskDescription {...props}/>
 
         <TaskRepetion timedelta_s={this_task.timedelta_seconds} />
 

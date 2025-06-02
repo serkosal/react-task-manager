@@ -13,6 +13,8 @@ export default function TaskList(
         filters: IFilters
     }) {
 
+    // console.log(tasks.map)
+
     const filtered_tasks = filters.hide_done ? 
         tasks.filter(task => !task.is_done) : tasks;
 
