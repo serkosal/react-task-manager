@@ -1,12 +1,12 @@
 import "./task.css"
+import { TasksContext, TasksDispatchContext, type ITasksReducerAction } from "./TaskList";
 
 /* https://www.flaticon.com/free-icon/bin_484662 */
 import trashBinLogo from "@/assets/bin.png"
 
-import type {ChangeEvent} from "react";
+import {useContext, type ChangeEvent} from "react";
 
 type TaskTag = string;
-
 export interface ITaskProps {
     id: string,
     color: string,
@@ -22,10 +22,14 @@ export interface ITaskProps {
     tags: TaskTag[]
 }
 
-const TASK_COLORS = [
-    '#356ca6', '#35a673', '#7ca635', "#6635a6",
-    '#823b71', '#3f4d4b', '#b57131', '#a84343'
-]
+function get_random_color() {
+    const TASK_COLORS = [
+        '#356ca6', '#35a673', '#7ca635', "#6635a6",
+        '#823b71', '#3f4d4b', '#b57131', '#a84343'
+    ];
+
+    return TASK_COLORS[Math.floor(Math.random() * TASK_COLORS.length)];
+}
 
 type CreateTaskInput = Partial<Omit<ITaskProps, 'id' | 'creation_date'>>;
 export function createTask(
@@ -40,7 +44,7 @@ export function createTask(
         responsibles = [],
         timedelta_seconds = Infinity,
         tags = [],
-        color = TASK_COLORS[Math.floor(Math.random() * TASK_COLORS.length)]
+        // color = 
     }: CreateTaskInput = {}
 ): ITaskProps {
     return {
@@ -58,40 +62,14 @@ export function createTask(
 
         timedelta_seconds,
         tags,
-        color,
+        color: get_random_color(),
     };
 }
 
-export const defaultTasks: ITaskProps[] = [
-    createTask({
-        title: "Buy milk", 
-        description: "Go to the shop and buy 1L of ultra-pasteurized milk."
-    }),
-    createTask({
-        title: "Go to the cinema", 
-        description: "Go to the cinema.",
-        priority: 2
-    }),
-    createTask({
-        title: "Water the flowers", 
-        timedelta_seconds: 86400
-    }),
+export function handle_edit_task() {
 
-]
-
-const DATETIME_FORMAT: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-};
-
-function findTask(id: string, tasks: ITaskProps[]): number {
-    return tasks.findIndex(item => item.id === id);
 }
+
 
 function hexToRGBA(hex: string, alpha: number): string {
   // Remove the "#" if present
@@ -106,47 +84,46 @@ function hexToRGBA(hex: string, alpha: number): string {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-function TaskHeader({id, tasks, children, setTasks}: {
-    id: string,
-    tasks: ITaskProps[],
-    children?: React.ReactNode, 
-    setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
-}) {
+function updateTask(new_task: ITaskProps, dispatcher: React.Dispatch<ITasksReducerAction> | null): void
+{
+    if (dispatcher)
+        dispatcher({
+            type: "change", 
+            task_id: new_task.id, 
+            new_task: new_task
+        })
+}
 
-    const this_task = tasks[findTask(id, tasks)];
+function TaskHeader({children, task}: {
+    task: ITaskProps,
+    children?: React.ReactNode, 
+    }) {
+
+    const dispatcher = useContext(TasksDispatchContext);
+    const tasks = useContext(TasksContext);
 
     function titleOnChange(ev: ChangeEvent<HTMLInputElement>) {
-        setTasks(prev => {
-            const index = findTask(id, prev);
-            const updatedTask = {...prev[index], title: ev.target.value}
-            const updatedTasks = [...prev];
-            updatedTasks[index] = updatedTask;
-
-            return [...updatedTasks];
-        })
-
-        
+        updateTask({...task, title: ev.target.value}, dispatcher);        
     };
 
     function checkBoxOnChange(ev: ChangeEvent<HTMLInputElement>) {
-        const index = findTask(id, tasks);
-        const updatedTask = {...this_task, is_done: ev.target.checked}
-        const new_tasks = [...tasks];
-        new_tasks[index] = updatedTask;
-        setTasks(new_tasks);
+        updateTask({...task, is_done: ev.target.checked}, dispatcher); 
     }
 
-    function onTaskDeleteClick(ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        setTasks(prev => {
-            const index = findTask(id, prev);
-            const updatedTasks = prev.slice(0, index).concat(prev.slice(index+1));
+    function onTaskDeleteClick(_ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 
-            return updatedTasks;
-        })
+        const index = tasks.findIndex(item => item.id === task.id);
+
+        if (dispatcher)
+            dispatcher({
+                type: "replace", 
+                new_tasks: tasks.slice(0, index).concat(tasks.slice(index+1))
+            })
+
     }
 
     const style = {
-        backgroundColor: hexToRGBA(this_task.color, 0.6),
+        backgroundColor: hexToRGBA(task.color, 0.6),
         backdropFilter: "1px"
     }
 
@@ -154,17 +131,16 @@ function TaskHeader({id, tasks, children, setTasks}: {
         <div className='task-header-main'>
             <input 
                 type="checkbox" 
-                id={`task-done-checkbox-${id}`}
-                name={`task-done-checkbox-${id}`}
-                value={`task-done-checkbox-${id}`}
-                checked={this_task.is_done}
+                name='task-done-checkbox'
+                value='task-done-checkbox'
+                checked={task.is_done}
                 onChange={checkBoxOnChange}
             />
             <input 
                 type="text" 
                 className="task-title-text-input"
                 placeholder="task title..."
-                value={this_task.title} 
+                value={task.title} 
                 onChange={titleOnChange}
                 
                 // space don't work because of 
@@ -189,25 +165,16 @@ function TaskHeader({id, tasks, children, setTasks}: {
 //     setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
 //     }) {}
 
-function TaskDescription({id, tasks, setTasks}: {
-    id: string,
-    tasks: ITaskProps[],
-    setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
+function TaskDescription({children, task}: {
+    task: ITaskProps,
+    children?: React.ReactNode, 
     }) {
 
-    const this_task = tasks[findTask(id, tasks)];
+    const dispatcher = useContext(TasksDispatchContext);
 
     function descrOnChange(event: ChangeEvent<HTMLTextAreaElement>) {
 
-        setTasks( prev => {
-
-            const index = findTask(id, prev);
-            const updatedTask: ITaskProps = {...prev[index], description: event.target.value}
-            const updatedTasks = [...prev];
-            updatedTasks[index] = updatedTask;
-
-            return [...updatedTasks];
-        });
+        updateTask({...task, description: event.target.value}, dispatcher);
 
         if (event.target.scrollHeight < 150)
         {
@@ -221,55 +188,48 @@ function TaskDescription({id, tasks, setTasks}: {
 
         <textarea 
             className="task-description-text-input"
-            value={this_task.description}
+            value={task.description}
             placeholder="task description..."
             onInput={descrOnChange} 
             onKeyDown={(e) => e.stopPropagation()}
         />
+        {children}
         <hr/>
         
     </div>
 }
 
-function TaskCreator({creator} : {creator: string}) {
+function TaskCreator({task}: {task: ITaskProps}) {
+
     return <div className="task-creator">
-        Created by: <a href="">{creator}</a>
+        Created by: <a href="">{task.creator}</a>
     </div>
 }
 
-function TaskColorPicker({id, tasks, setTasks}: {
-    id: string,
-    tasks: ITaskProps[],
-    setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
+function TaskColorPicker({task}: {
+    task: ITaskProps,
     }) {
 
-        const this_task = tasks[findTask(id, tasks)];
+    const dispatcher = useContext(TasksDispatchContext);
 
-        return <input 
-            type="color"
-            // id={`task-color-picker-${id}`}
-            className="task-color-picker"
-            name='task-color-picker'
-            value={this_task.color}
-            onChange={(event: ChangeEvent<HTMLInputElement>) => {
-
-                setTasks((prev) => {
-                    const index = findTask(id, prev);
-                    const updatedTask = {...prev[index], color: event.target.value}
-                    const updatedTasks = [...prev];
-                    updatedTasks[index] = updatedTask;
-
-                    return updatedTasks;
-                })
-            }}
-        />
+    return <input 
+        type="color"
+        // id={`task-color-picker-${id}`}
+        className="task-color-picker"
+        name='task-color-picker'
+        value={task.color}
+        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            updateTask({...task, color: event.target.value}, dispatcher);
+        }}
+    />
 }
 
-function TaskCreationDate({creation_date} : {creation_date: Date}) {
+function TaskCreationDate({task}: {
+    task: ITaskProps,
+    children?: React.ReactNode, 
+    }) {
     return  <div className="task-creation-date">
-        {creation_date.toLocaleString(
-            'en-GB', DATETIME_FORMAT
-        )}
+        {DateTodateTimeLocalNow(task.creation_date)}
     </div>
 }
 
@@ -279,30 +239,19 @@ function DateTodateTimeLocalNow(date: Date): string {
         ).toISOString().slice(0, 16);
 }
 
-function TaskDeadlineDate({id, tasks, setTasks}: {
-    id: string,
-    tasks: ITaskProps[],
-    setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
-    }) {
+function TaskDeadlineDate({task}: {task: ITaskProps}) {
 
-    const this_task = tasks[findTask(id, tasks)];
+    const dispatcher = useContext(TasksDispatchContext);
 
     return <input 
         type="datetime-local" 
         className="task-deadline-date"
-        value={DateTodateTimeLocalNow(this_task.deadline)}
+        value={DateTodateTimeLocalNow(task.deadline)}
         onChange={(event) => {
             try {
                 const new_deadline = new Date(event.target.value);
 
-                setTasks( prev => {
-                    const index = findTask(id, prev);
-                    const updatedTask: ITaskProps = {...prev[index], deadline: new_deadline }
-                    const updatedTasks = [...prev];
-                    updatedTasks[index] = updatedTask;
-
-                    return updatedTasks;
-                })
+                updateTask({...task, deadline: new_deadline}, dispatcher);
             }
             catch (e: unknown) {
                 console.log(e);
@@ -312,24 +261,30 @@ function TaskDeadlineDate({id, tasks, setTasks}: {
     />
 }
 
-function TaskFooter({children}: {
-    children: React.ReactNode,
+function TaskFooter({_task, children}: {
+    _task?: ITaskProps,
+    children?: React.ReactNode, 
     }) {
 
     return <div className="task-footer">{children}</div>
 }
 
-function TaskPriority({priority}: {priority: number}) {
+
+function TaskPriority({task}: {task: ITaskProps}) {
+
     return <div className="task-priority">
-        priority {priority}
+        priority {task.priority}
     </div>
 }
 
-function TaskRepetion({timedelta_s}: {timedelta_s: number}) {
+function TaskRepetion({task}: {
+    task: ITaskProps,
+    children?: React.ReactNode, 
+    }) {
 
-    if (timedelta_s === +Infinity) return;
+    if (task.timedelta_seconds === +Infinity) return;
 
-    const timedelta = new Date(timedelta_s);
+    const timedelta = new Date(task.timedelta_seconds);
 
     return (Number.isFinite(timedelta)  ? <div className="task-repetition">
         repeat: {DateTodateTimeLocalNow(timedelta)}
@@ -337,13 +292,8 @@ function TaskRepetion({timedelta_s}: {timedelta_s: number}) {
 }
 
 export default function Task(props : {
-    id: string, 
-    tasks: ITaskProps[], 
-    setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
+    task: ITaskProps 
 }) {
-
-    const this_task = props.tasks[findTask(props.id, props.tasks)];
-
     // let responsibles: React.ReactNode[];
     
     // if (props.responsibles) {
@@ -353,8 +303,8 @@ export default function Task(props : {
     return <div className="task">
         
         <TaskHeader {...props}>
-            <TaskCreator creator={this_task.creator} />
-            <TaskCreationDate creation_date={this_task.creation_date} />
+            <TaskCreator {...props} />
+            <TaskCreationDate {...props} />
             <TaskDeadlineDate {...props} />
             <TaskColorPicker {...props} />
         </TaskHeader>
@@ -362,11 +312,11 @@ export default function Task(props : {
 
         <TaskDescription {...props}/>
 
-        <TaskFooter {...props}>
-            <TaskRepetion timedelta_s={this_task.timedelta_seconds} />
-            <TaskPriority priority={this_task.priority} />
+        <TaskFooter>
+            <TaskRepetion {...props} />
+            <TaskPriority {...props} />
             <div className="task-tags" >
-                {this_task.tags.map((el, ind) => <a className="task-tag" key={ind} href="">{el} </a>)}
+                {props.task.tags.map((el, ind) => <a className="task-tag" key={ind} href="">{el} </a>)}
             </div>
         </TaskFooter>
         

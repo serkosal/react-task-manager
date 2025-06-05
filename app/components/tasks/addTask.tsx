@@ -1,21 +1,20 @@
-import type { ITaskProps } from "./task";
+import { useContext } from "react";
 import { createTask } from "./task";
-import type { Dispatch, SetStateAction } from "react";
+import { TasksDispatchContext } from "./TaskList";
 
-export default function AddTask({setTasks} : {
-    setTasks: Dispatch<SetStateAction<ITaskProps[]>>
-}) {
+export default function AddTask({new_task = createTask({tags:["New"]})}) {
+
+    const dispatcher = useContext(TasksDispatchContext);
 
     return <button className="add-task-button" onClick={buttonClick}>
         + Create new task +
     </button>
 
     function buttonClick(_event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        setTasks(prev => {
-            return [
-                createTask({tags:["New"]}),
-                ...prev,
-            ]
-        })
+        if (dispatcher)
+            dispatcher({
+                type: "add",
+                new_task: new_task
+            })
     }
 }

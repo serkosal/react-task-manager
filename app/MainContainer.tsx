@@ -1,55 +1,39 @@
 import AddTask from "./components/tasks/addTask"
-import TaskList from "./components/tasks/TaskList"
+import TaskList, {from_local_storage, tasksReducer, TasksDispatchContext} from "./components/tasks/TaskList"
 import Filters from "./components/Filters"
 import type { IFilters } from "./components/tasks/task_filtration"
 
-import { useState } from 'react'
-import {defaultTasks, type ITaskProps} from "./components/tasks/task"
-
-let init_tasks: ITaskProps[];
-
-try {
-
-    const stored = localStorage.getItem("tasks");
-
-    init_tasks = stored ? 
-
-        JSON.parse(stored, (_key, value) => {
-
-
-            // Detect ISO date string and convert to Date
-            if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(value)) {
-                return new Date(value);
-            }
-            return value;
-        })
-
-    : defaultTasks;
-
-} catch (e) {
-    console.error("Failed to parse tasks from localStorage", e);
-    init_tasks = defaultTasks;
-}
+import { useEffect, useReducer, useState } from 'react'
 
 export default function MainContainer() {
 
-    const [tasks, setTasks] = useState(init_tasks);
+    const [isUnsaved, setIsUnsaved] = useState(false);
+    const [tasks, dispatchTasks] = useReducer(tasksReducer, from_local_storage());
+    const [filters, setFilters] = useState<IFilters>({hide_done: false});
 
-    const [filters, setFilters] = useState<IFilters>({hide_done: false})
+    useEffect(() => {
+        setIsUnsaved(true);
+    }, [tasks]);
 
     return <div className="main-container">
 
         <Filters filters={filters} setFilters={setFilters}/>
 
-            <AddTask setTasks={setTasks}/>
+            <TasksDispatchContext value={dispatchTasks}>
+            <AddTask/>
+
             <button onClick={() => {
                 localStorage.setItem("tasks", JSON.stringify(tasks));
-            }}>
+                setIsUnsaved(false);
+            }} disabled={!isUnsaved}>
                 Save to the local storage
             </button>
+
+
             <div className="task-list">
-                <TaskList tasks={tasks} setTasks={setTasks} filters={filters} />
+                <TaskList tasks={tasks} filters={filters} />
             </div>
-        
+
+            </TasksDispatchContext>
     </div>
 }
