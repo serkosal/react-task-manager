@@ -3,6 +3,7 @@ html, body {
     padding: 0px;
 
     color:aliceblue;
+    background-color: rgb(34, 36, 48);
 
     height: 100vh;
 }
@@ -27,7 +28,7 @@ html, body {
 .main-container {
     width: 100%;
     min-height: 100%;
-    background-color: rgb(34, 36, 48);
+    
 
     display: flex;
     flex-direction: column;

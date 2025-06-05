@@ -1,4 +1,3 @@
-import './app.css'
 import MainContainer from './MainContainer'
 import Menu from './components/Menu'
 
