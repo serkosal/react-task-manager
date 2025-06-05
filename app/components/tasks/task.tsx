@@ -1,5 +1,8 @@
 import "./task.css"
 
+/* https://www.flaticon.com/free-icon/bin_484662 */
+import trashBinLogo from "@/assets/bin.png"
+
 import type {ChangeEvent} from "react";
 
 type TaskTag = string;
@@ -133,6 +136,15 @@ function TaskHeader({id, tasks, children, setTasks}: {
         setTasks(new_tasks);
     }
 
+    function onTaskDeleteClick(ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        setTasks(prev => {
+            const index = findTask(id, prev);
+            const updatedTasks = prev.slice(0, index).concat(prev.slice(index+1));
+
+            return updatedTasks;
+        })
+    }
+
     const style = {
         backgroundColor: hexToRGBA(this_task.color, 0.6),
         backdropFilter: "1px"
@@ -159,6 +171,10 @@ function TaskHeader({id, tasks, children, setTasks}: {
                 // dndkit captures control
                 onKeyDown={(e) => e.stopPropagation()}  
             />
+
+            <button className="task-delete-button" onClick={onTaskDeleteClick}>
+                <img className="task-delete-img" src={trashBinLogo} alt="delete"></img>
+            </button>
         </div>
         
         <div className="task-header-children">
@@ -315,11 +331,9 @@ function TaskRepetion({timedelta_s}: {timedelta_s: number}) {
 
     const timedelta = new Date(timedelta_s);
 
-    return <div className="task-repetition">
-        repeat: {timedelta.toLocaleString(
-            'en-GB', DATETIME_FORMAT
-        )};
-    </div>
+    return (Number.isFinite(timedelta)  ? <div className="task-repetition">
+        repeat: {DateTodateTimeLocalNow(timedelta)}
+    </div> : undefined)
 }
 
 export default function Task(props : {
@@ -352,7 +366,7 @@ export default function Task(props : {
             <TaskRepetion timedelta_s={this_task.timedelta_seconds} />
             <TaskPriority priority={this_task.priority} />
             <div className="task-tags" >
-                {this_task.tags.map((el, ind) => <a key={ind} href="">#{el} </a>)}
+                {this_task.tags.map((el, ind) => <a className="task-tag" key={ind} href="">{el} </a>)}
             </div>
         </TaskFooter>
         
