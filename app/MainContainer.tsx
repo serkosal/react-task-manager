@@ -30,9 +30,7 @@ export default function MainContainer() {
             </button>
 
 
-            <div className="task-list">
-                <TaskList tasks={tasks} filters={filters} />
-            </div>
+            <TaskList tasks={tasks} filters={filters} />
 
             </TasksDispatchContext>
     </div>

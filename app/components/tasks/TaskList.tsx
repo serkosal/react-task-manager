@@ -94,35 +94,36 @@ export const TasksDispatchContext = createContext<Dispatch<ITasksReducerAction> 
 export default function TaskList(
     {tasks, filters} : {
         tasks: ITaskProps[],
-        filters: IFilters
+        filters?: IFilters
     }) {
 
     const tasksDispatcher = useContext(TasksDispatchContext);
 
-    const filtered_tasks = filters.hide_done ? 
-        tasks.filter(task => !task.is_done) : tasks;
+    const filtered_tasks = filters ? (filters.hide_done ? 
+        tasks.filter(task => !task.is_done) : tasks) : tasks;
 
-    return (
+    return ( <div className="task-list">
         <TasksContext value={tasks}>
-        <DragDropProvider 
-            onDragEnd={(event) => {
-                if (event.canceled || !tasksDispatcher) return;
+            <DragDropProvider 
+                onDragEnd={(event) => {
+                    if (event.canceled || !tasksDispatcher) return;
 
-                tasksDispatcher({type: "replace", new_tasks: move(tasks, event)})
-            }}
-        >
-        {filtered_tasks.map((task, index) => 
-                <SortableItem key={task.id} id={task.id} index={index}>
-                        <Task 
-                            key={task.id}
-                            task={task}
-                            // tasks={tasks} 
-                            // setTasks={setTasks}
-                        />
-                </SortableItem>
-        )}
-        </DragDropProvider>
-        </TasksContext>)
+                    tasksDispatcher({type: "replace", new_tasks: move(tasks, event)})
+                }}
+            >
+            {filtered_tasks.map((task, index) => 
+                    <SortableItem key={task.id} id={task.id} index={index}>
+                            <Task 
+                                key={task.id}
+                                task={task}
+                                // tasks={tasks} 
+                                // setTasks={setTasks}
+                            />
+                    </SortableItem>
+            )}
+            </DragDropProvider>
+        </TasksContext>
+    </div>)
 
     
 }

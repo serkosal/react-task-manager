@@ -8,11 +8,16 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export default function Calendar({children} : {children?: ReactElement})
 {
-    const [value, onChange] = useState<Value>(new Date());
+    const [date, setDate] = useState<Value>(new Date());
+
+    function onChangeDay(value: Value, _event: React.MouseEvent<HTMLButtonElement>) {
+        console.log("usser pressed", value);
+    }
 
     return (
         <div>
-            <Lcalendar onChange={onChange} value={value} />
+            <Lcalendar onChange={setDate} value={date} onClickDay={onChangeDay}/>
+            {children}
         </div>
     );
 } 
