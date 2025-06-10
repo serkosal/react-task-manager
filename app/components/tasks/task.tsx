@@ -261,8 +261,7 @@ function TaskDeadlineDate({task}: {task: ITaskProps}) {
     />
 }
 
-function TaskFooter({_task, children}: {
-    _task?: ITaskProps,
+function TaskFooter({children}: {
     children?: React.ReactNode, 
     }) {
 
