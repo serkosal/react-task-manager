@@ -92,18 +92,18 @@ export const TasksContext = createContext(Array<ITaskProps>());
 export const TasksDispatchContext = createContext<Dispatch<ITasksReducerAction> | null>(null);
 
 export default function TaskList(
-    {tasks, filters} : {
-        tasks: ITaskProps[],
+    {filters} : {
         filters?: IFilters
     }) {
 
+    const tasks = useContext(TasksContext);
     const tasksDispatcher = useContext(TasksDispatchContext);
 
     const filtered_tasks = filters ? (filters.hide_done ? 
         tasks.filter(task => !task.is_done) : tasks) : tasks;
 
     return ( <div className="task-list">
-        <TasksContext value={tasks}>
+        
             <DragDropProvider 
                 onDragEnd={(event) => {
                     if (event.canceled || !tasksDispatcher) return;
@@ -122,7 +122,6 @@ export default function TaskList(
                     </SortableItem>
             )}
             </DragDropProvider>
-        </TasksContext>
     </div>)
 
     

@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import Lcalendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { type ReactElement } from "react"
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-export default function Calendar({children} : {children?: ReactElement})
+export default function Calendar()
 {
     const [date, setDate] = useState<Value>(new Date());
 
@@ -15,9 +14,6 @@ export default function Calendar({children} : {children?: ReactElement})
     }
 
     return (
-        <div>
-            <Lcalendar onChange={setDate} value={date} onClickDay={onChangeDay}/>
-            {children}
-        </div>
+        <Lcalendar onChange={setDate} value={date} onClickDay={onChangeDay}/>
     );
 } 
