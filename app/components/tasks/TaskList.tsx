@@ -4,7 +4,7 @@ import {move} from '@dnd-kit/helpers';
 
 import Task, {createTask} from "./task";
 import type { ITaskProps } from "./task";
-import type { IFilters } from "./task_filtration"
+import { type IFilters, filter_tasks } from "./task_filtration"
 import { createContext, useContext, type Dispatch } from "react";
 
 
@@ -96,11 +96,9 @@ export default function TaskList(
         filters?: IFilters
     }) {
 
-    const tasks = useContext(TasksContext);
     const tasksDispatcher = useContext(TasksDispatchContext);
-
-    const filtered_tasks = filters ? (filters.hide_done ? 
-        tasks.filter(task => !task.is_done) : tasks) : tasks;
+    const tasks = useContext(TasksContext);
+    const filtered_tasks = filter_tasks(tasks, filters)
 
     return ( <div className="task-list">
         
@@ -116,8 +114,6 @@ export default function TaskList(
                             <Task 
                                 key={task.id}
                                 task={task}
-                                // tasks={tasks} 
-                                // setTasks={setTasks}
                             />
                     </SortableItem>
             )}
