@@ -42,10 +42,10 @@ export function filter_tasks(tasks: ITask[], filters?: IFilters) {
 
 
     if (filters.deadline_from_date !== undefined)
-        res = res.filter(t => filters.deadline_from_date! <= t.creation_date);
+        res = res.filter(t => filters.deadline_from_date! <= t.deadline);
 
     if (filters.deadline_to_date !== undefined)
-        res = res.filter(t => filters.deadline_to_date! >= t.creation_date);
+        res = res.filter(t => filters.deadline_to_date! >= t.deadline);
 
     return res;
 }

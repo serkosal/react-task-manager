@@ -6,12 +6,13 @@
  * @module components/Calendar
 */
 
-import { useState } from 'react';
-import Lcalendar from 'react-calendar';
+import { useState, useContext } from 'react';
+import Lcalendar  from 'react-calendar';
+import { type TileArgs } from 'react-calendar/src/index.js';
 import 'react-calendar/dist/Calendar.css';
 
-import TaskList from "./tasks/TaskList"
-import { type IFilters } from './tasks/task_filtration';
+import TaskList, {TasksContext} from "./tasks/TaskList"
+import { type IFilters} from './tasks/task_filtration';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -27,6 +28,7 @@ export default function Calendar()
     */
 
     const [date, setDate] = useState<Value>(new Date());
+    const tasks = useContext(TasksContext);
     const [filters, setFilters] = useState<IFilters>({deadline_from_date: new Date()});
 
 
@@ -39,9 +41,25 @@ export default function Calendar()
         }
     }
 
+    function tileContent({date} : TileArgs ) {
+
+        const to_date = new Date(+date + 24*3600*1000);
+
+        const num = tasks.reduce(
+            (count, task) => (task.deadline >= date && task.deadline <= to_date) 
+                ? count + 1 : count, 0
+        );
+
+
+        return num ? <p> <b>{num}</b></p>: undefined;
+    }
+
+
+
     return <>
-        <Lcalendar onChange={setDate} value={date} onClickDay={onChangeDay}/>
+        <Lcalendar tileContent={tileContent} onChange={setDate} value={date} onClickDay={onChangeDay}/>
 
         <TaskList filters={filters} />
     </>;
-} 
+}
+
