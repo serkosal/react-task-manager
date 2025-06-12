@@ -17,15 +17,15 @@ export default function Menu()
     let planning_links: React.ReactNode[] = [];
 
     if (location.pathname !== "/") planning_links.push(
-        <div className="menu-item"><Link to={"/"}>Back</Link>     </div>
+        <div key="menu-item-back" className="menu-item"><Link to={"/"}>Back</Link>     </div>
     );
 
     if (location.pathname !== "/calendar") planning_links.push(
-        <div className="menu-item"><Link to={"/calendar"}>calendar</Link>     </div>
+        <div key="menu-item-calendar" className="menu-item"><Link to={"/calendar"}>calendar</Link>     </div>
     );
 
     if (location.pathname !== "/scheduler") planning_links.push(
-        <div className="menu-item"><Link to={"/scheduler"}>scheduler</Link>     </div>
+        <div key="menu-item-scheduler" className="menu-item"><Link to={"/scheduler"}>scheduler</Link>     </div>
     );
 
     return <div className="Menu">

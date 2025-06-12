@@ -49,17 +49,19 @@ function get_random_color():string {
     return TASK_COLORS[Math.floor(Math.random() * TASK_COLORS.length)];
 }
 
-type CreateTaskInput = Partial<Omit<ITask, 'id' | 'creation_date'>>;
+export type CreateTaskInput = Partial<ITask>;
 /**
  * helper function for task creation
  * @returns new task from provided properties
  */
 export function createTask(
     {
+        id = crypto.randomUUID(),
         title = "",
         description = "",
         priority = 5,
         deadline = (new Date(Date.now() + 24*3600*1000)),
+        creation_date = new Date,
 
         creator = "Anonymous",
         is_done = false,
@@ -70,7 +72,7 @@ export function createTask(
     }: CreateTaskInput = {}
 ): ITask {
     return {
-        id: crypto.randomUUID(),        
+        id,        
 
         title,
         description,
@@ -79,7 +81,7 @@ export function createTask(
         is_done,
 
         creator,
-        creation_date: new Date(),
+        creation_date,
         responsibles,
 
         timedelta_seconds,

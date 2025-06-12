@@ -6,7 +6,7 @@
  */
 
 import React, { useContext } from "react";
-import { createTask } from "./task";
+import { createTask, type CreateTaskInput } from "./task";
 import { TasksDispatchContext } from "./TaskList";
 
 // 📌 Import for documentation only
@@ -19,8 +19,9 @@ import { type ITasksReducerAction } from "./TaskList";
  * @returns React button component to create a task.
  */
 export default function AddTaskButton(
-    {new_task = createTask({tags:["New"]})}
+    {new_task = {tags:["New"]}} : {new_task: CreateTaskInput}
     ): React.ReactNode {
+    "use no memo";
 
     const dispatcher = useContext(TasksDispatchContext);
 
@@ -37,7 +38,7 @@ export default function AddTaskButton(
         if (dispatcher)
             dispatcher({
                 type: "add",
-                new_task: new_task
+                new_task: createTask(new_task)
             })
     }
 }
