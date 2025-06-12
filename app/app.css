@@ -8,27 +8,44 @@ html, body {
     height: 100vh;
 }
 
+
+/* for debugging 
+* {
+  background: none !important;
+  color: black !important;
+  box-shadow: none !important;
+  outline: 2px solid rgba(0,0,0,0.2) !important;
+  border: none !important;
+} */
+
+
 #root {
     height: 100%;
 }
 
 .App {
     display: flex;
-
-    min-height: 100%;
+    flex-direction: row;
+    flex-wrap:nowrap;
 }
 
 .Menu {
     background-color: rgb(18, 19, 26);
 
+    flex: 0 0 10%;
     display:flex;
     flex-direction: column;
+    justify-content: flex-start;
+
+    min-height: 100%;
 }
 
 .main-container {
-    width: 100%;
-    min-height: 100%;
-    
+    margin: 0px;
+    flex: 0 10 90%;
+
+    width: 90%;
+    min-height: unset;
 
     display: flex;
     flex-direction: column;
@@ -37,6 +54,7 @@ html, body {
 
 .Filters {
     text-align: center;
+    width: fit-content;
     /* display: flex;
     flex-direction: column; */
 }
@@ -49,10 +67,17 @@ html, body {
     margin: 20px;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    width: fit-content;
 }
 
 .Dragable {
+    flex: 0 1 400px;
+    min-width: 0px;
+
+    /* width: 400px; */
     /* to prevent scrolling */
-    touch-action: none; 
+    touch-action: none;
 }
