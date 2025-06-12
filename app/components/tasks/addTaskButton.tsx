@@ -19,7 +19,7 @@ import { type ITasksReducerAction } from "./TaskList";
  * @returns React button component to create a task.
  */
 export default function AddTaskButton(
-    {new_task = {tags:["New"]}} : {new_task: CreateTaskInput}
+    new_task: CreateTaskInput = {tags:["New"]}
     ): React.ReactNode {
     "use no memo";
 
