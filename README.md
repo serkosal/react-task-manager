@@ -33,6 +33,8 @@ It was also developed as a way to study the React library and modern web technol
 - **[Typescript](https://www.typescriptlang.org/)** - superset of javascript, providing *type safety*
 - **[React](https://react.dev/)**      - framework for creation of client-side *web app*.
 - **[Vite](https://vite.dev/)**       - is the *build tool*
+- **[react-router]()** - for routing
+- **[react-compiler]()** - for auto optimization
 - **[dnd-kit]()** - *drag and drop* library
 - **[react-calendar]()** - react *calendar* library
 - **[type-doc]()** - for code documentation

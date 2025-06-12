@@ -17,7 +17,7 @@ import Filters from "./Filters"
 export default function MainTasksView() {
 
     const [isUnsaved, setIsUnsaved] = useState(false);
-    const [filters, setFilters] = useState<IFilters>({hide_done: false});
+    const [filters, setFilters] = useState<IFilters>({hide_done: true});
     const tasks = useContext(TasksContext);
 
     useEffect(() => {
