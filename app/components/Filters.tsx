@@ -1,3 +1,11 @@
+/**
+ * @file Filters.tsx
+ * @description This file contains Filters component
+ *  
+ * 
+ * @module components/Filters
+*/
+
 import type { ChangeEvent } from "react";
 
 import type { IFilters } from "./tasks/task_filtration";

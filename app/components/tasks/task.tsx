@@ -1,3 +1,10 @@
+/**
+ * @file task.tsx
+ * @description This file contains render components for tasks and helper functions.
+ * 
+ * @module components/tasks/task
+*/
+
 import "./task.css"
 import { TasksContext, TasksDispatchContext, type ITasksReducerAction } from "./TaskList";
 
@@ -6,6 +13,9 @@ import trashBinLogo from "@/assets/bin.png"
 
 import {useContext, type ChangeEvent} from "react";
 
+/**
+ * interface for Task objects
+ */
 type TaskTag = string;
 export interface ITask {
     id: string,
@@ -25,7 +35,12 @@ export interface ITask {
     tags: TaskTag[]
 }
 
-function get_random_color() {
+/**
+ * helper function
+ * @returns random color from inner const list.
+ * Colors in hex format #rrggbb. Expected that colors are valid css value.
+ */
+function get_random_color():string {
     const TASK_COLORS = [
         '#356ca6', '#35a673', '#7ca635', "#6635a6",
         '#823b71', '#3f4d4b', '#b57131', '#a84343'
@@ -35,6 +50,10 @@ function get_random_color() {
 }
 
 type CreateTaskInput = Partial<Omit<ITask, 'id' | 'creation_date'>>;
+/**
+ * helper function for task creation
+ * @returns new task from provided properties
+ */
 export function createTask(
     {
         title = "",
@@ -69,11 +88,15 @@ export function createTask(
     };
 }
 
-export function handle_edit_task() {
+// export function handle_edit_task() {
 
-}
+// }
 
 
+/**
+ * helper function to transform hex colors to rgba format.
+ * @returns string in format 'rgba(r, g, b, a) to be used as a css value.
+ */
 function hexToRGBA(hex: string, alpha: number): string {
   // Remove the "#" if present
   hex = hex.replace(/^#/, '');
@@ -87,6 +110,9 @@ function hexToRGBA(hex: string, alpha: number): string {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
+/**
+ * handles 'change' dispatch action.
+ */
 function updateTask(new_task: ITask, dispatcher: React.Dispatch<ITasksReducerAction> | null): void
 {
     if (dispatcher)
@@ -97,6 +123,9 @@ function updateTask(new_task: ITask, dispatcher: React.Dispatch<ITasksReducerAct
         })
 }
 
+/**
+ * renders task's header react component.
+ */
 function TaskHeader({children, task}: {
     task: ITask,
     children?: React.ReactNode, 
@@ -168,6 +197,9 @@ function TaskHeader({children, task}: {
 //     setTasks: React.Dispatch<React.SetStateAction<ITaskProps[]>>
 //     }) {}
 
+/**
+ * renders task's description react component.
+ */
 function TaskDescription({children, task}: {
     task: ITask,
     children?: React.ReactNode, 
@@ -202,6 +234,9 @@ function TaskDescription({children, task}: {
     </div>
 }
 
+/**
+ * renders task's creator react component.
+ */
 function TaskCreator({task}: {task: ITask}) {
 
     return <div className="task-creator">
@@ -209,6 +244,9 @@ function TaskCreator({task}: {task: ITask}) {
     </div>
 }
 
+/**
+ * renders task's color picker react component.
+ */
 function TaskColorPicker({task}: {
     task: ITask,
     }) {
@@ -227,6 +265,9 @@ function TaskColorPicker({task}: {
     />
 }
 
+/**
+ * renders task's creation date react component.
+ */
 function TaskCreationDate({task}: {
     task: ITask,
     children?: React.ReactNode, 
@@ -236,12 +277,20 @@ function TaskCreationDate({task}: {
     </div>
 }
 
+
+/**
+ * helper function to transform date to local format.
+ */
 function DateTodateTimeLocalNow(date: Date): string {
     return  new Date(
         date.getTime() - date.getTimezoneOffset() * 60_000
         ).toISOString().slice(0, 16);
 }
 
+
+/**
+ * renders task's deadline date react component.
+ */
 function TaskDeadlineDate({task}: {task: ITask}) {
 
     const dispatcher = useContext(TasksDispatchContext);
@@ -264,6 +313,9 @@ function TaskDeadlineDate({task}: {task: ITask}) {
     />
 }
 
+/**
+ * renders task's footer react component.
+ */
 function TaskFooter({children}: {
     children?: React.ReactNode, 
     }) {
@@ -272,6 +324,9 @@ function TaskFooter({children}: {
 }
 
 
+/**
+ * renders task's priority react component.
+ */
 function TaskPriority({task}: {task: ITask}) {
 
     return <div className="task-priority">
@@ -279,6 +334,9 @@ function TaskPriority({task}: {task: ITask}) {
     </div>
 }
 
+/**
+ * renders task's repetion react component.
+ */
 function TaskRepetion({task}: {
     task: ITask,
     children?: React.ReactNode, 
@@ -293,6 +351,9 @@ function TaskRepetion({task}: {
     </div> : undefined)
 }
 
+/**
+ * renders task react component.
+ */
 export default function Task(props : {
     task: ITask 
 }) {

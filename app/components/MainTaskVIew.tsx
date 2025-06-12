@@ -1,3 +1,11 @@
+/**
+ * @file MainTasksView.tsx
+ * @description This file contains MainTasksView component
+ *  
+ * 
+ * @module components/MainTasksView
+*/
+
 import { useState, useEffect, useContext } from "react";
 
 import AddTask from "./tasks/addTaskButton"

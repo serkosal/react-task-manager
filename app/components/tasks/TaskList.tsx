@@ -1,3 +1,15 @@
+/**
+ * @file TaskList.tsx
+ * @description This file contains render components for task lists, 
+ * context for dispatcher and list, 
+ * reducer and actions, 
+ * r/w logic for local storage,
+ * list of default tasks
+ *  
+ * 
+ * @module components/tasks/TaskList
+*/
+
 import { SortableItem } from "../dndkit/SortableItem";
 import {DragDropProvider} from '@dnd-kit/react';
 import {move} from '@dnd-kit/helpers';

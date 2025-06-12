@@ -1,3 +1,11 @@
+/**
+ * @file Menu.tsx
+ * @description This file contains Menu component
+ *  
+ * 
+ * @module components/Menu
+*/
+
 import { Link } from "react-router"
 
 export default function Menu()

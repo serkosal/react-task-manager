@@ -1,3 +1,10 @@
+/**
+ * @file addTaskButton.tsx
+ * @description Renders a button for adding new task to the TaskList. It requires provided {@link TasksDispatchContext}.
+ * 
+ * @module components/addTaskButton
+ */
+
 import React, { useContext } from "react";
 import { createTask } from "./task";
 import { TasksDispatchContext } from "./TaskList";

@@ -1,3 +1,11 @@
+/**
+ * @file Calendar.tsx
+ * @description This file contains Calendar component
+ *  
+ * 
+ * @module components/Calendar
+*/
+
 import { useState } from 'react';
 import Lcalendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
