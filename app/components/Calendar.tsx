@@ -10,6 +10,14 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export default function Calendar()
 {
+    /*
+        TODO
+
+        Create map: day -> list<Task>
+        For ability to show num of tasks per day
+        use property `tileContent` from Lcalendar
+    */
+
     const [date, setDate] = useState<Value>(new Date());
     const [filters, setFilters] = useState<IFilters>({deadline_from_date: new Date()});
 

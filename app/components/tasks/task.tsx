@@ -10,14 +10,17 @@ type TaskTag = string;
 export interface ITaskProps {
     id: string,
     color: string,
-    title: string,
-    is_done: boolean,
+    title: string,                      // add task start time
     description: string,
+
     creator: string,
     responsibles?: number[],
+
     creation_date: Date,
-    deadline: Date,
-    timedelta_seconds: number
+    is_done: boolean,               // done_date if null means not done yet
+    deadline: Date,                     // 
+    timedelta_seconds: number           // repeat time
+
     priority: number,
     tags: TaskTag[]
 }
