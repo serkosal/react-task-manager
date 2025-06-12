@@ -9,7 +9,7 @@ It was also developed as a way to study the React library and modern web technol
 
 ## Functionality and project roadmap
 
-- [ ] Responsive, mobile-first user interface
+- [x] Responsive, mobile-first user interface
 - [x] CRUD functionality for task managing (not fully implemented yet)
 - [x] Drag-andn-drop interactions
 - [x] Persistent local storage
@@ -33,11 +33,11 @@ It was also developed as a way to study the React library and modern web technol
 - **[Typescript](https://www.typescriptlang.org/)** - superset of javascript, providing *type safety*
 - **[React](https://react.dev/)**      - framework for creation of client-side *web app*.
 - **[Vite](https://vite.dev/)**       - is the *build tool*
-- **[react-router]()** - for routing
-- **[react-compiler]()** - for auto optimization
-- **[dnd-kit]()** - *drag and drop* library
-- **[react-calendar]()** - react *calendar* library
-- **[type-doc]()** - for code documentation
+- **[react-router](https://reactrouter.com/)** - for *routing*
+- **[react-compiler](https://react.dev/learn/react-compiler)** - for auto *optimization*
+- **[dnd-kit](https://github.com/clauderic/dnd-kit)** - *drag-and-drop* library
+- **[react-calendar](https://github.com/wojtekmaj/react-calendar)** - react *calendar* library
+- **[type-doc](https://typedoc.org/)** - for code *documentation*
 
 ### Backend
 No backend has been implemented yet.
