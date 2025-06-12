@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 
-import AddTask from "./tasks/addTask"
+import AddTask from "./tasks/addTaskButton"
 import TaskList, {TasksContext} from "./tasks/TaskList"
 
 import { type IFilters } from "./tasks/task_filtration"

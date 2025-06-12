@@ -3,12 +3,12 @@ import {DragDropProvider} from '@dnd-kit/react';
 import {move} from '@dnd-kit/helpers';
 
 import Task, {createTask} from "./task";
-import type { ITaskProps } from "./task";
+import type { ITask } from "./task";
 import { type IFilters, filter_tasks } from "./task_filtration"
 import { createContext, useContext, type Dispatch } from "react";
 
 
-export const defaultTasks: ITaskProps[] = [
+export const defaultTasks: ITask[] = [
     createTask({
         title: "Buy milk", 
         description: "Go to the shop and buy 1L of ultra-pasteurized milk."
@@ -27,7 +27,7 @@ export const defaultTasks: ITaskProps[] = [
 
 export function from_local_storage(init = defaultTasks){
 
-    let init_tasks: ITaskProps[];
+    let init_tasks: ITask[];
 
     try {
     
@@ -58,21 +58,21 @@ export function from_local_storage(init = defaultTasks){
 export type ITasksReducerAction = (
     {
         type: "replace";
-        new_tasks: ITaskProps[];
+        new_tasks: ITask[];
     } | {
         type: "add";
-        new_task: ITaskProps;
+        new_task: ITask;
     } | {
         type: "change";
         task_id: string;
-        new_task: ITaskProps;
+        new_task: ITask;
     } | {
         type: "delete";
         task_id: string;
     }
 );
 
-export function tasksReducer(tasks: ITaskProps[], action: ITasksReducerAction):ITaskProps[] 
+export function tasksReducer(tasks: ITask[], action: ITasksReducerAction):ITask[] 
 {
     switch (action.type) {
         case "add": {return [...tasks, action.new_task]; }
@@ -88,7 +88,7 @@ export function tasksReducer(tasks: ITaskProps[], action: ITasksReducerAction):I
     }
 }
 
-export const TasksContext = createContext(Array<ITaskProps>());
+export const TasksContext = createContext(Array<ITask>());
 export const TasksDispatchContext = createContext<Dispatch<ITasksReducerAction> | null>(null);
 
 export default function TaskList(

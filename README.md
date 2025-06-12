@@ -34,7 +34,8 @@ It was also developed as a way to study the React library and modern web technol
 - **[React](https://react.dev/)**      - framework for creation of client-side *web app*.
 - **[Vite](https://vite.dev/)**       - is the *build tool*
 - **[dnd-kit]()** - *drag and drop* library
-- **[react-calendar]** - react *calendar* library
+- **[react-calendar]()** - react *calendar* library
+- **[type-doc]()** - for code documentation
 
 ### Backend
 No backend has been implemented yet.

@@ -1,4 +1,4 @@
-import { type ITaskProps } from "./task"
+import { type ITask } from "./task"
 
 export interface IFilters {
     hide_done?: boolean,
@@ -8,7 +8,7 @@ export interface IFilters {
     deadline_to_date?: Date
 }
 
-export function filter_tasks(tasks: ITaskProps[], filters?: IFilters) {
+export function filter_tasks(tasks: ITask[], filters?: IFilters) {
 
     if (!filters) return tasks;
 

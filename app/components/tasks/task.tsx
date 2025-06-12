@@ -7,7 +7,7 @@ import trashBinLogo from "@/assets/bin.png"
 import {useContext, type ChangeEvent} from "react";
 
 type TaskTag = string;
-export interface ITaskProps {
+export interface ITask {
     id: string,
     color: string,
     title: string,                      // add task start time
@@ -34,7 +34,7 @@ function get_random_color() {
     return TASK_COLORS[Math.floor(Math.random() * TASK_COLORS.length)];
 }
 
-type CreateTaskInput = Partial<Omit<ITaskProps, 'id' | 'creation_date'>>;
+type CreateTaskInput = Partial<Omit<ITask, 'id' | 'creation_date'>>;
 export function createTask(
     {
         title = "",
@@ -49,7 +49,7 @@ export function createTask(
         tags = [],
         // color = 
     }: CreateTaskInput = {}
-): ITaskProps {
+): ITask {
     return {
         id: crypto.randomUUID(),        
 
@@ -87,7 +87,7 @@ function hexToRGBA(hex: string, alpha: number): string {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-function updateTask(new_task: ITaskProps, dispatcher: React.Dispatch<ITasksReducerAction> | null): void
+function updateTask(new_task: ITask, dispatcher: React.Dispatch<ITasksReducerAction> | null): void
 {
     if (dispatcher)
         dispatcher({
@@ -98,7 +98,7 @@ function updateTask(new_task: ITaskProps, dispatcher: React.Dispatch<ITasksReduc
 }
 
 function TaskHeader({children, task}: {
-    task: ITaskProps,
+    task: ITask,
     children?: React.ReactNode, 
     }) {
 
@@ -169,7 +169,7 @@ function TaskHeader({children, task}: {
 //     }) {}
 
 function TaskDescription({children, task}: {
-    task: ITaskProps,
+    task: ITask,
     children?: React.ReactNode, 
     }) {
 
@@ -202,7 +202,7 @@ function TaskDescription({children, task}: {
     </div>
 }
 
-function TaskCreator({task}: {task: ITaskProps}) {
+function TaskCreator({task}: {task: ITask}) {
 
     return <div className="task-creator">
         Created by: <a href="">{task.creator}</a>
@@ -210,7 +210,7 @@ function TaskCreator({task}: {task: ITaskProps}) {
 }
 
 function TaskColorPicker({task}: {
-    task: ITaskProps,
+    task: ITask,
     }) {
 
     const dispatcher = useContext(TasksDispatchContext);
@@ -228,7 +228,7 @@ function TaskColorPicker({task}: {
 }
 
 function TaskCreationDate({task}: {
-    task: ITaskProps,
+    task: ITask,
     children?: React.ReactNode, 
     }) {
     return  <div className="task-creation-date">
@@ -242,7 +242,7 @@ function DateTodateTimeLocalNow(date: Date): string {
         ).toISOString().slice(0, 16);
 }
 
-function TaskDeadlineDate({task}: {task: ITaskProps}) {
+function TaskDeadlineDate({task}: {task: ITask}) {
 
     const dispatcher = useContext(TasksDispatchContext);
 
@@ -272,7 +272,7 @@ function TaskFooter({children}: {
 }
 
 
-function TaskPriority({task}: {task: ITaskProps}) {
+function TaskPriority({task}: {task: ITask}) {
 
     return <div className="task-priority">
         priority {task.priority}
@@ -280,7 +280,7 @@ function TaskPriority({task}: {task: ITaskProps}) {
 }
 
 function TaskRepetion({task}: {
-    task: ITaskProps,
+    task: ITask,
     children?: React.ReactNode, 
     }) {
 
@@ -294,7 +294,7 @@ function TaskRepetion({task}: {
 }
 
 export default function Task(props : {
-    task: ITaskProps 
+    task: ITask 
 }) {
     // let responsibles: React.ReactNode[];
     

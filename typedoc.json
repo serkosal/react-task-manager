@@ -1,0 +1,8 @@
+{
+    "entryPoints": ["app"],
+    "entryPointStrategy": "expand",
+    "out": "docs",
+    "includeVersion": true,
+    "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/*.stories.tsx"],
+    "excludePrivate": true
+}
