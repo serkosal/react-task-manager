@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './app'), // т.к. assets лежит в корне проекта, а не в /src
+      '@': path.resolve(__dirname, './app'),
     },
   },
 })
